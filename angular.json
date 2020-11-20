@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "ngrx-course"
+  "defaultProject": "ngrx-course",
+  "cli": {
+    "analytics": "014c786c-559e-492e-824a-bc7637d13f1f"
+  }
 }

@@ -1,0 +1,11 @@
+<h1>Projects</h1>
+<ul>
+  <li *ngFor="let project of projects$ | async" (click)="selectProject(project.id)">
+    <span>{{ project.title }}</span> <button (click)="deleteProject(project.id)">Delete Project</button>
+    <div *ngIf="(selectedProjectId$ | async) === project.id">
+      <label for="title">Title</label>
+      <input type="text" id="title" [ngModel]="project.title" #input />
+      <button (click)="updateProject({ title: input.value, id: project.id })">Update</button>
+    </div>
+  </li>
+</ul>
