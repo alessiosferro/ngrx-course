@@ -8,11 +8,8 @@ import {
   ProjectUpdated,
   SelectProject
 } from './projects.action';
-import {exhaustMap, map, mapTo, tap} from 'rxjs/operators';
+import {exhaustMap, map, switchMap, tap} from 'rxjs/operators';
 import {v4 as uuid} from 'uuid';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../models/app-state.model';
-import {timer} from 'rxjs';
 import {Project} from '../../models';
 
 @Injectable({
@@ -22,62 +19,64 @@ export class ProjectsEffects {
   @Effect()
   loadProjects = this.actions.pipe(
     ofType(ProjectsActionTypes.LoadProjects),
-    map(() => {
-      return [
-        { id: uuid(), title: 'Places' },
-        { id: uuid(), title: 'Itas'}
-      ];
+    switchMap(() => {
+      return new Promise<Project[]>(resolve => {
+        setTimeout(() => resolve([
+          {id: uuid(), title: 'Places'},
+          {id: uuid(), title: 'Itas'}
+        ]), 200);
+      });
     }),
-    tap((projects) => this.store.dispatch(new ProjectsLoaded(projects)))
+    map((projects) => new ProjectsLoaded(projects))
   );
 
   @Effect()
   addProject = this.actions.pipe(
     ofType(ProjectsActionTypes.AddProject),
-    exhaustMap((title: string) => {
+    exhaustMap(({ payload: title }) => {
       // fake wait for backend api call response
-      return timer(200).pipe(
-        map(() => ({
+      return new Promise<Project>(resolve => {
+        setTimeout(() => resolve({
           id: uuid(),
           title
-        }))
-      );
+        }), 200);
+      });
     }),
-    tap((project) => this.store.dispatch(new ProjectAdded(project)))
+    map((project) => new ProjectAdded(project))
   );
 
   @Effect()
   projectUpdated = this.actions.pipe(
     ofType(ProjectsActionTypes.ProjectUpdated),
-    tap(() => this.store.dispatch(new SelectProject(null)))
+    map(() => new SelectProject(null))
   );
 
   @Effect()
   updateProject = this.actions.pipe(
-    ofType(ProjectsActionTypes.AddProject),
-    exhaustMap((project: Project) => {
+    ofType(ProjectsActionTypes.UpdateProject),
+    exhaustMap(({ payload: project }) => {
       // fake wait for backend api call response
-      return timer(200).pipe(
-        mapTo(project)
-      );
+      return new Promise<Project>(resolve => {
+        setTimeout(() => resolve(project), 200);
+      });
     }),
-    tap((project) => this.store.dispatch(new ProjectUpdated(project)))
+    map((project) => new ProjectUpdated(project))
   );
 
   @Effect()
   deleteProject = this.actions.pipe(
     ofType(ProjectsActionTypes.DeleteProject),
-    exhaustMap(projectId => {
+    exhaustMap(({ payload: projectId }) => {
       // fake wait for backend api call response
-      return timer(200).pipe(
-        mapTo(projectId)
-      );
+      return new Promise<string>(resolve => {
+        setTimeout(() => resolve(projectId), 200);
+      });
     }),
-    tap((projectId) => this.store.dispatch(new ProjectDeleted(projectId)))
+    map((projectId) => new ProjectDeleted(projectId))
   );
 
   constructor(
-    private actions: Actions,
-    private store: Store<AppState>
-  ) {}
+    private actions: Actions
+  ) {
+  }
 }

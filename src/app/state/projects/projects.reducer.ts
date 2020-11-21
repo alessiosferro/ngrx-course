@@ -32,7 +32,7 @@ function reducer(state = initialState, action: any): ProjectsState {
       return adapter.addOne(action.payload, state);
 
     case ProjectsActionTypes.ProjectUpdated:
-      return adapter.updateOne(action.payload, state);
+      return adapter.updateOne({ id: action.payload.id, changes: action.payload }, state);
 
     case ProjectsActionTypes.SelectProject:
       return {

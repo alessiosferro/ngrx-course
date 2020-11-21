@@ -4,11 +4,15 @@ import {Project} from '../../models';
 export enum ProjectsActionTypes {
   AddProject = '[Projects] Add Project',
   ProjectAdded = '[Projects] Project Added',
+
   UpdateProject = '[Projects] Update Project',
   ProjectUpdated = '[Projects] Project Updated',
+
   DeleteProject = '[Projects] Delete Project',
   ProjectDeleted = '[Projects] Project Deleted',
+
   SelectProject = '[Projects] Select Project',
+
   LoadProjects = '[Projects] Load Projects',
   ProjectsLoaded = '[Projects] Projects Loaded'
 }
