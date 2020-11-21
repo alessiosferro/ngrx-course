@@ -3,8 +3,9 @@ import {Observable} from 'rxjs';
 import {Project} from '../../models';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../models/app-state.model';
-import {pluck} from 'rxjs/operators';
-import {DeleteProject, SelectProject, UpdateProject} from '../../state/projects/projects.action';
+import {map, pluck, tap} from 'rxjs/operators';
+import {DeleteProject, LoadProjects, SelectProject, UpdateProject} from '../../state/projects/projects.action';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-project-list',
@@ -17,11 +18,17 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private store$: Store<AppState>
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    this.store$.dispatch(new LoadProjects([
+      { id: uuid(), title: 'Places' },
+      { id: uuid(), title: 'Itas'}
+    ]));
+
     this.projects$ = this.store$.select('projects').pipe(
-      pluck('projects')
+      pluck('entities'),
+      map(data => Object.keys(data).map(k => data[k] as Project))
     );
 
     this.selectedProjectId$ = this.store$.select('projects').pipe(

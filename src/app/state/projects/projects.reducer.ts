@@ -1,48 +1,26 @@
-import {ProjectActions, ProjectsActionTypes} from './projects.action';
+import {ProjectsActionTypes} from './projects.action';
 import {Project, ProjectsState} from '../../models/project.model';
+import {createEntityAdapter, EntityAdapter} from '@ngrx/entity';
 
-const initialState: ProjectsState = {
-  projects: [],
+const adapter: EntityAdapter<Project> = createEntityAdapter<Project>();
+
+const initialState: ProjectsState = adapter.getInitialState({
   selectedProjectId: null
-};
+});
 
-function addProject(projects: Project[], newProject: Project): Project[] {
-  return [...projects, newProject];
-}
-
-function updateProject(projects: Project[], updatedProject: Project): Project[] {
-  return projects.map(project => {
-    if (!(project.id === updatedProject.id)) {
-      return project;
-    }
-
-    return {...updatedProject};
-  });
-}
-
-function deleteProject(projects: Project[], projectId: string): Project[] {
-  return projects.filter(project => project.id !== projectId);
-}
-
-function reducer(state = initialState, action: ProjectActions): ProjectsState {
+function reducer(state = initialState, action: any): ProjectsState {
   switch (action.type) {
     case ProjectsActionTypes.AddProject:
-      return {
-        ...state,
-        projects: addProject(state.projects, action.payload)
-      };
+      return adapter.addOne(action.payload, state);
 
     case ProjectsActionTypes.UpdateProject:
-      return {
-        ...state,
-        projects: updateProject(state.projects, action.payload)
-      };
+      return adapter.updateOne({ id: action.payload.id, changes: action.payload }, state);
 
     case ProjectsActionTypes.DeleteProject:
-      return {
-        ...state,
-        projects: deleteProject(state.projects, action.payload)
-      };
+      return adapter.removeOne(action.payload, state);
+
+    case ProjectsActionTypes.LoadProjects:
+      return adapter.addMany(action.payload, state);
 
     case ProjectsActionTypes.SelectProject:
       return {

@@ -5,7 +5,8 @@ export enum ProjectsActionTypes {
   AddProject = '[Projects] Add Project',
   UpdateProject = '[Projects] Update Project',
   DeleteProject = '[Projects] Delete Project',
-  SelectProject = '[Projects] Select Project'
+  SelectProject = '[Projects] Select Project',
+  LoadProjects = '[Projects] Load Projects',
 }
 
 export class AddProject implements Action {
@@ -28,5 +29,10 @@ export class SelectProject implements Action {
   constructor(public payload: string | null) {}
 }
 
-export type ProjectActions = AddProject | UpdateProject | DeleteProject | SelectProject;
+export class LoadProjects implements Action {
+  readonly type = ProjectsActionTypes.LoadProjects;
+  constructor(public payload: Project[]) {}
+}
+
+export type ProjectActions = AddProject | UpdateProject | DeleteProject | SelectProject | LoadProjects;
 
