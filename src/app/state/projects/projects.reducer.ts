@@ -12,8 +12,6 @@ const initialState: ProjectsState = adapter.getInitialState({
   selectedProjectId: null
 });
 
-export const getSelectedProjectId = (state: ProjectsState) => state.selectedProjectId;
-
 export const {
   selectAll: selectAllProjects,
   selectEntities: selectAllProjectEntities,

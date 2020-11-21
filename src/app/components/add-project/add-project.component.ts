@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../models/app-state.model';
 import {AddProject} from '../../state/projects/projects.action';
-import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-add-project',
