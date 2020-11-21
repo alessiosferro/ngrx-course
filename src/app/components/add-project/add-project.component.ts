@@ -22,7 +22,7 @@ export class AddProjectComponent {
       return;
     }
 
-    this.store$.dispatch(new AddProject({ id: uuid(), title }));
+    this.store$.dispatch(new AddProject(title));
   }
 
 }

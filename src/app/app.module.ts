@@ -6,6 +6,8 @@ import {ComponentsModule} from './components/components.module';
 import {StoreModule} from '@ngrx/store';
 import {reducers} from './state';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {EffectsModule} from '@ngrx/effects';
+import {ProjectsEffects} from "./state/projects/projects.effects";
 
 @NgModule({
   declarations: [
@@ -15,7 +17,10 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
     BrowserModule,
     ComponentsModule,
     StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({ maxAge: 10 })
+    EffectsModule.forRoot([
+      ProjectsEffects
+    ]),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
   bootstrap: [AppComponent]

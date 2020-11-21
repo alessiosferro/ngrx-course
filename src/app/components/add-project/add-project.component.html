@@ -1,3 +1,5 @@
-<label for="title">Project Title</label>
-<input type="text" id="title" #input />
-<button (click)="addProject(input)">Add Project</button>
+<form (ngSubmit)="addProject(input)">
+  <label for="title">Project Title</label>
+  <input name="title" type="text" id="title" #input/>
+  <button>Add Project</button>
+</form>
