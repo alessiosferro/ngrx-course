@@ -5,7 +5,7 @@ import {select, Store} from '@ngrx/store';
 import {AppState} from '../../models/app-state.model';
 import {DeleteProject, LoadProjects, SelectProject, UpdateProject} from '../../state/projects/projects.action';
 import {selectAllProjects} from '../../state/projects/projects.reducer';
-import {selectSelectedProjectId} from '../../state';
+import {selectCurrentProject, selectCurrentProjectId} from '../../state/projects/projects.selectors';
 import {filter, pluck} from 'rxjs/operators';
 
 @Component({
@@ -16,6 +16,7 @@ import {filter, pluck} from 'rxjs/operators';
 export class ProjectListComponent implements OnInit, AfterViewInit {
   projects$: Observable<Project[]> | undefined;
   selectedProjectId$: Observable<string | null> | undefined;
+  currentProject$: Observable<Project | null> | undefined;
 
   @ViewChildren('input')
   inputElement: QueryList<HTMLInputElement> | undefined;
@@ -32,7 +33,11 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
     );
 
     this.selectedProjectId$ = this.store$.pipe(
-      select(selectSelectedProjectId)
+      select(selectCurrentProjectId)
+    );
+
+    this.currentProject$ = this.store$.pipe(
+      select(selectCurrentProject)
     );
   }
 
